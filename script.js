@@ -27,6 +27,9 @@ window.addEventListener("load", () => {
         if (e.code === "ArrowUp" && !this.keys.includes("ArrowUp")) {
           this.keys.push("ArrowUp");
         }
+        if (e.code === "ArrowDown" && !this.keys.includes("ArrowDown")) {
+          this.keys.push("ArrowDown");
+        }
       });
 
       window.addEventListener("keyup", (e) => {
@@ -38,6 +41,9 @@ window.addEventListener("load", () => {
         }
         if (e.code === "ArrowUp" && this.keys.includes("ArrowUp")) {
           this.keys.splice(this.keys.indexOf("ArrowUp"), 1);
+        }
+        if (e.code === "ArrowDown" && this.keys.includes("ArrowDown")) {
+          this.keys.splice(this.keys.indexOf("ArrowDown"), 1);
         }
       });
     }
@@ -57,8 +63,8 @@ window.addEventListener("load", () => {
       this.playerAnimations = playerAnimations;
       this.frameX = 0;
       this.speed = 0;
-      this.currentAnimation = "idle";
-      this.maxFrames = 9;
+      this.currentAnimation = "walk";
+      this.maxFrames = 8;
       this.donorWidth = 48;
       this.donorHeight = 48;
 
@@ -69,7 +75,7 @@ window.addEventListener("load", () => {
       this.jumpCount = 0;
 
       this.tickCount = 0;
-      this.ticksPerFrame = 3;
+      this.ticksPerFrame = 5;
     }
     draw(context) {
       const animation = this.playerAnimations.find(
@@ -93,18 +99,20 @@ window.addEventListener("load", () => {
     }
 
     update(input) {
-      if (this.vy < 0) {
+      if (input.keys.indexOf("ArrowDown") > -1 && this.vy === 0) {
+        this.currentAnimation = "roll";
+      } else if (this.vy < 0) {
         console.log("jump up");
-        this.currentAnimation = "jump-up";
+        this.currentAnimation = "run";
       } else if (this.vy > 0) {
         console.log("fall");
-        this.currentAnimation = "jump-down";
+        this.currentAnimation = "run";
       } else if (this.speed !== 0) {
         console.log("running");
         this.currentAnimation = "run";
       } else {
-        console.log("idle");
-        this.currentAnimation = "idle";
+        console.log("walk");
+        this.currentAnimation = "walk";
       }
 
       const animation = playerAnimations.find(
@@ -120,6 +128,7 @@ window.addEventListener("load", () => {
           this.frameX = 0;
         }
       }
+
       // controls
       if (input.keys.indexOf("ArrowRight") > -1) {
         this.speed = 4;

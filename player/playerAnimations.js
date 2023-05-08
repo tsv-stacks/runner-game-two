@@ -1,5 +1,7 @@
 const playerIdle = new Image();
 playerIdle.src = "./player/player-idle.png";
+const playerWalk = new Image();
+playerWalk.src = "./player/player-walk.png";
 const playerRun = new Image();
 playerRun.src = "./player/player-run.png";
 const playerDeath = new Image();
@@ -69,6 +71,11 @@ const playerAnimations = [
     animation: "jump-down",
     image: playerJumpDown,
     frames: 1,
+  },
+  {
+    animation: "walk",
+    image: playerWalk,
+    frames: 8,
   },
 ];
 
