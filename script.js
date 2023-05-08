@@ -112,7 +112,6 @@ window.addEventListener("load", () => {
         console.log("running");
         this.currentAnimation = "run";
       } else {
-        console.log("walk");
         this.currentAnimation = "walk";
       }
 
@@ -132,7 +131,7 @@ window.addEventListener("load", () => {
 
       // controls
       if (input.keys.indexOf("ArrowRight") > -1) {
-        this.speed = 4;
+        this.speed = 5;
       } else if (input.keys.indexOf("ArrowLeft") > -1) {
         this.speed = -4;
       } else {
@@ -243,8 +242,10 @@ window.addEventListener("load", () => {
       if (this.frameIndex >= this.frames) {
         this.frameIndex = 0;
       }
-      if (this.x < 0 - this.width) {
+      if (this.x < 0 - this.gameWidth + this.imageWidth) {
+        console.log("delete");
         this.markedForDeletion = true;
+        score += 100;
       }
     }
   }
@@ -267,7 +268,11 @@ window.addEventListener("load", () => {
     enemies = enemies.filter((enemy) => !enemy.markedForDeletion);
   }
 
-  function displayStatusText() {}
+  function displayStatusText(context) {
+    context.fillStyle = "black";
+    context.font = "40px Helvetica";
+    context.fillText(`Score: ${score}`, 20, 50);
+  }
 
   const input = new InputHandler();
   const player = new Player(canvas.width, canvas.height);
@@ -295,6 +300,7 @@ window.addEventListener("load", () => {
     player.draw(ctx);
     player.update(input);
     handleEnemies(deltaTime);
+    displayStatusText(ctx);
     requestAnimationFrame(animate);
   }
   animate(0);

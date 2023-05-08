@@ -4,3 +4,4 @@
 - increase game speed every 30 seconds
 - import google font + add to project
 - context.font = ""
+- Add Hearts + life system
