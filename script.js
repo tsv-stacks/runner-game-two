@@ -95,12 +95,10 @@ window.addEventListener("load", () => {
     update(input) {
       if (this.vy < 0) {
         console.log("jump up");
-        this.currentAnimation = "jump";
-        this.frameX = 0;
+        this.currentAnimation = "jump-up";
       } else if (this.vy > 0) {
         console.log("fall");
-        this.currentAnimation = "jump";
-        this.frameX = 2;
+        this.currentAnimation = "jump-down";
       } else if (this.speed !== 0) {
         console.log("running");
         this.currentAnimation = "run";
@@ -113,12 +111,6 @@ window.addEventListener("load", () => {
         (animation) => animation.animation === this.currentAnimation
       );
 
-      if (this.vy < 0) {
-        this.frameX = 0;
-      } else if (this.vy > 0) {
-        this.frameX = 2;
-      }
-
       this.tickCount++;
 
       if (this.tickCount >= this.ticksPerFrame) {
@@ -128,7 +120,6 @@ window.addEventListener("load", () => {
           this.frameX = 0;
         }
       }
-
       // controls
       if (input.keys.indexOf("ArrowRight") > -1) {
         this.speed = 4;
