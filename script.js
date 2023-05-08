@@ -67,6 +67,13 @@ window.addEventListener("load", () => {
         this.scaleWidth,
         this.scaleHeight
       );
+      context.strokeStyle = "white";
+      context.strokeRect(
+        this.x + 30,
+        this.y - 14,
+        this.scaleWidth - 60,
+        this.scaleHeight - 32
+      );
     }
 
     update(input) {
@@ -157,6 +164,9 @@ window.addEventListener("load", () => {
       this.markedForDeletion = false;
     }
     draw(context) {
+      context.strokeStyle = "white";
+      context.strokeRect(this.x + 67, this.y - 10, 36 * 2.4, 24 * 2.7);
+
       context.drawImage(
         this.image,
         ([this.frameIndex] * this.imageWidth) / this.frames,
@@ -169,6 +179,7 @@ window.addEventListener("load", () => {
         this.imageHeight * this.scale
       );
     }
+
     update() {
       this.x -= this.speed;
       this.tickCount++;
@@ -188,19 +199,16 @@ window.addEventListener("load", () => {
 
   function handleEnemies(deltaTime) {
     enemyTimer += deltaTime;
-
     if (enemyTimer > randomEnemyInterval()) {
       enemies.push(
         new Enemy(canvas.width, canvas.height, enemyImage, 672, 32, 3, 7)
       );
       enemyTimer = 0;
     }
-
     enemies.forEach((enemy) => {
       enemy.draw(ctx);
       enemy.update();
     });
-
     enemies = enemies.filter((enemy) => !enemy.markedForDeletion);
   }
 
