@@ -10,6 +10,7 @@ window.addEventListener("load", () => {
   const backgroundImage3 = new Image();
   backgroundImage3.src = "./background/city-foreground.png";
   let enemies = [];
+  let score = 0;
 
   canvas.width = 800;
   canvas.height = 720;
@@ -207,7 +208,7 @@ window.addEventListener("load", () => {
       this.gameWidth = gameWidth;
       this.gameHeight = gameHeight;
       this.image = image;
-      this.x = 10;
+      this.x = gameWidth;
       this.y = this.gameHeight - 96;
       this.imageWidth = imageWidth;
       this.imageHeight = imageHeight;
@@ -217,6 +218,7 @@ window.addEventListener("load", () => {
       this.tickCount = 0;
       this.ticksPerFrame = 3;
       this.speed = Math.floor(Math.random() * 3) + 2;
+      this.markedForDeletion = false;
     }
     draw(context) {
       context.drawImage(
@@ -225,14 +227,14 @@ window.addEventListener("load", () => {
         0,
         96,
         this.imageHeight,
-        this.gameWidth,
+        this.x,
         this.y - 40,
         this.imageWidth / this.scale,
         this.imageHeight * this.scale
       );
     }
     update() {
-      this.gameWidth -= this.speed;
+      this.x -= this.speed;
       this.tickCount++;
       if (this.tickCount > this.ticksPerFrame) {
         this.tickCount = 0;
@@ -240,6 +242,9 @@ window.addEventListener("load", () => {
       }
       if (this.frameIndex >= this.frames) {
         this.frameIndex = 0;
+      }
+      if (this.x < 0 - this.width) {
+        this.markedForDeletion = true;
       }
     }
   }
@@ -258,6 +263,8 @@ window.addEventListener("load", () => {
       enemy.draw(ctx);
       enemy.update();
     });
+
+    enemies = enemies.filter((enemy) => !enemy.markedForDeletion);
   }
 
   function displayStatusText() {}
