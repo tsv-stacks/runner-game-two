@@ -1,4 +1,6 @@
 import playerAnimations from "./player/playerAnimations.js";
+import InputHandler from "./Scripts/InputHandler.js";
+import { displayStatusText, liveHearts } from "./Scripts/HUD.js";
 
 window.addEventListener("load", () => {
   const canvas = document.getElementById("canvas1");
@@ -10,45 +12,11 @@ window.addEventListener("load", () => {
   const backgroundImage3 = new Image();
   backgroundImage3.src = "./background/city-foreground.png";
   let enemies = [];
+  let playerLives = 3;
   let score = 0;
 
   canvas.width = 800;
   canvas.height = 720;
-
-  class InputHandler {
-    constructor() {
-      this.keys = [];
-      window.addEventListener("keydown", (e) => {
-        if (e.code === "ArrowRight" && !this.keys.includes("ArrowRight")) {
-          this.keys.push("ArrowRight");
-        }
-        if (e.code === "ArrowLeft" && !this.keys.includes("ArrowLeft")) {
-          this.keys.push("ArrowLeft");
-        }
-        if (e.code === "ArrowUp" && !this.keys.includes("ArrowUp")) {
-          this.keys.push("ArrowUp");
-        }
-        if (e.code === "ArrowDown" && !this.keys.includes("ArrowDown")) {
-          this.keys.push("ArrowDown");
-        }
-      });
-
-      window.addEventListener("keyup", (e) => {
-        if (e.code === "ArrowRight" && this.keys.includes("ArrowRight")) {
-          this.keys.splice(this.keys.indexOf("ArrowRight"), 1);
-        }
-        if (e.code === "ArrowLeft" && this.keys.includes("ArrowLeft")) {
-          this.keys.splice(this.keys.indexOf("ArrowLeft"), 1);
-        }
-        if (e.code === "ArrowUp" && this.keys.includes("ArrowUp")) {
-          this.keys.splice(this.keys.indexOf("ArrowUp"), 1);
-        }
-        if (e.code === "ArrowDown" && this.keys.includes("ArrowDown")) {
-          this.keys.splice(this.keys.indexOf("ArrowDown"), 1);
-        }
-      });
-    }
-  }
 
   class Player {
     constructor(gameWidth, gameHeight) {
@@ -78,6 +46,7 @@ window.addEventListener("load", () => {
       this.tickCount = 0;
       this.ticksPerFrame = 5;
     }
+
     draw(context) {
       const animation = this.playerAnimations.find(
         (anim) => anim.animation === this.currentAnimation
@@ -125,6 +94,7 @@ window.addEventListener("load", () => {
         this.frameX++;
         this.tickCount = 0;
         if (this.frameX >= animation.frames) {
+          score += 2;
           this.frameX = 0;
         }
       }
@@ -243,7 +213,6 @@ window.addEventListener("load", () => {
         this.frameIndex = 0;
       }
       if (this.x < 0 - this.gameWidth + this.imageWidth) {
-        console.log("delete");
         this.markedForDeletion = true;
         score += 100;
       }
@@ -266,12 +235,6 @@ window.addEventListener("load", () => {
     });
 
     enemies = enemies.filter((enemy) => !enemy.markedForDeletion);
-  }
-
-  function displayStatusText(context) {
-    context.fillStyle = "black";
-    context.font = "40px Helvetica";
-    context.fillText(`Score: ${score}`, 20, 50);
   }
 
   const input = new InputHandler();
@@ -300,7 +263,8 @@ window.addEventListener("load", () => {
     player.draw(ctx);
     player.update(input);
     handleEnemies(deltaTime);
-    displayStatusText(ctx);
+    displayStatusText(ctx, score);
+    liveHearts(ctx, playerLives);
     requestAnimationFrame(animate);
   }
   animate(0);

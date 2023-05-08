@@ -5,3 +5,5 @@
 - import google font + add to project
 - context.font = ""
 - Add Hearts + life system
+- Add score++ somewhere
+- Start and end screen
