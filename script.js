@@ -70,13 +70,14 @@ window.addEventListener("load", () => {
       context.strokeStyle = "white";
       context.strokeRect(
         this.x + 30,
-        this.y - 14,
+        this.y - 6,
         this.scaleWidth - 60,
-        this.scaleHeight - 32
+        this.scaleHeight - 40
       );
     }
 
     update(input) {
+      // Sprite Animation
       if (input.keys.indexOf("ArrowDown") > -1 && this.vy === 0) {
         this.currentAnimation = "roll";
       } else if (this.vy < 0) {
@@ -178,6 +179,10 @@ window.addEventListener("load", () => {
         this.imageWidth / this.scale,
         this.imageHeight * this.scale
       );
+
+      context.beginPath();
+      context.arc(this.x + 110, this.y + 30, 24 * 1.6, 0, Math.PI * 2);
+      context.stroke();
     }
 
     update() {
