@@ -226,7 +226,7 @@ window.addEventListener("load", () => {
       this.frameIndex = 0;
       this.tickCount = 0;
       this.ticksPerFrame = 3;
-      this.speed = Math.floor(Math.random() * 3) + 2;
+      this.speed = Math.floor(Math.random() * 3) + 3;
       this.markedForDeletion = false;
       this.collision = false;
     }
@@ -245,6 +245,16 @@ window.addEventListener("load", () => {
     }
 
     update() {
+      if (score > 750) {
+        this.speed = Math.floor(Math.random() * 3) + 5;
+      } else if (score > 1500) {
+        this.speed = Math.floor(Math.random() * 3) + 7;
+      } else if (score > 2000) {
+        this.speed = Math.floor(Math.random() * 3) + 9;
+      } else if (score > 2500) {
+        this.speed = Math.floor(Math.random() * 3) + 11;
+      }
+
       this.x -= this.speed;
       this.tickCount++;
       if (this.tickCount > this.ticksPerFrame) {
@@ -254,7 +264,7 @@ window.addEventListener("load", () => {
       if (this.frameIndex >= this.frames) {
         this.frameIndex = 0;
       }
-      if (this.x < 0 - this.gameWidth + this.imageWidth) {
+      if (this.x < 0 - this.gameWidth + this.imageWidth - 30) {
         this.markedForDeletion = true;
         score += 100;
       }
@@ -263,10 +273,17 @@ window.addEventListener("load", () => {
 
   function handleEnemies(deltaTime) {
     enemyTimer += deltaTime;
-    if (enemyTimer > randomEnemyInterval()) {
+    let scoreModifier = 0;
+    if (score > 1000) {
+      scoreModifier = 1000;
+    } else if (score > 2000) {
+      scoreModifier = 1500;
+    }
+    if (enemyTimer > randomEnemyInterval() - scoreModifier) {
       enemies.push(
         new Enemy(canvas.width, canvas.height, enemyImage, 672, 32, 3, 7)
       );
+
       enemyTimer = 0;
     }
     enemies.forEach((enemy) => {

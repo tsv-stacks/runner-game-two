@@ -7,7 +7,7 @@
 - [x] Add Hearts + life system
 - [x] Add score++ somewhere
 - [x] End screen
-- [ ] Start screen
+- [x] Start screen
 - [ ] Toggle Fullscreen button
 - [ ] Add music and mute button
 - [ ] Hurt Animation
