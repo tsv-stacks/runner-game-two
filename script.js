@@ -19,6 +19,17 @@ window.addEventListener("load", () => {
   let score = 0;
   let gameOver = false;
 
+  const startBtn = document.getElementById("start-btn");
+  const splashscreen = document.getElementById("splashscreen");
+
+  function startGame() {
+    startBtn.style.display = "none";
+    splashscreen.style.display = "none";
+    animate(0);
+  }
+
+  startBtn.addEventListener("click", startGame);
+
   class InputHandler {
     constructor() {
       this.keys = [];
@@ -333,5 +344,4 @@ window.addEventListener("load", () => {
       requestAnimationFrame(animate);
     }
   }
-  animate(0);
 });
