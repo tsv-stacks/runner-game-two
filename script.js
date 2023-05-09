@@ -1,6 +1,7 @@
 import playerAnimations from "./player/playerAnimations.js";
 import InputHandler from "./Scripts/InputHandler.js";
 import { displayStatusText, liveHearts } from "./Scripts/HUD.js";
+import { clamp, randomEnemyInterval } from "./Scripts/HelperFunctions.js";
 import {
   backgroundImage1,
   backgroundImage2,
@@ -76,7 +77,36 @@ window.addEventListener("load", () => {
       );
     }
 
-    update(input) {
+    update(input, enemies) {
+      // collision detection
+      enemies.forEach((enemy) => {
+        const circle = {
+          x: enemy.x + 110,
+          y: enemy.y + 30,
+          r: 24 * 1.6,
+        };
+        const rect = {
+          x: this.x + 30,
+          y: this.y - 6,
+          w: this.scaleWidth - 60,
+          h: this.scaleHeight - 40,
+        };
+
+        // Find the closest point to the circle within the rectangle
+        let closestX = clamp(circle.x, rect.x, rect.x + rect.w);
+        let closestY = clamp(circle.y, rect.y, rect.y + rect.h);
+
+        // Calculate the distance between the circle's center and the closest point
+        let distanceX = circle.x - closestX;
+        let distanceY = circle.y - closestY;
+        let distanceSquared = distanceX * distanceX + distanceY * distanceY;
+
+        // Check if the distance is less than the circle's radius
+        if (distanceSquared < circle.r * circle.r) {
+          console.log("Collision detected!");
+        }
+      });
+
       // Sprite Animation
       if (input.keys.indexOf("ArrowDown") > -1 && this.vy === 0) {
         this.currentAnimation = "roll";
@@ -166,7 +196,6 @@ window.addEventListener("load", () => {
     }
     draw(context) {
       context.strokeStyle = "white";
-      context.strokeRect(this.x + 67, this.y - 10, 36 * 2.4, 24 * 2.7);
 
       context.drawImage(
         this.image,
@@ -252,9 +281,6 @@ window.addEventListener("load", () => {
 
   let lastTime = 0;
   let enemyTimer = 0;
-  function randomEnemyInterval() {
-    return Math.floor(Math.random() * 4000) + 3000;
-  }
 
   function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime;
@@ -266,11 +292,11 @@ window.addEventListener("load", () => {
     layer2.draw(ctx);
     layer3.update();
     layer3.draw(ctx);
-    player.draw(ctx);
-    player.update(input);
     handleEnemies(deltaTime);
     displayStatusText(ctx, score);
     liveHearts(ctx, playerLives);
+    player.draw(ctx);
+    player.update(input, enemies);
     requestAnimationFrame(animate);
   }
   animate(0);
