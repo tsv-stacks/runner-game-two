@@ -1,9 +1,9 @@
 export function displayStatusText(context, score) {
-  context.font = "40px Helvetica";
+  context.font = "40px Common Pixel, sans-serif";
   context.fillStyle = "black";
-  context.fillText(`Score: ${score}`, 20, 50);
+  context.fillText(`SCORE: ${score}`, 22, 50);
   context.fillStyle = "white";
-  context.fillText(`Score: ${score}`, 22, 52);
+  context.fillText(`SCORE: ${score}`, 24, 52);
 }
 
 export function liveHearts(context, heart) {

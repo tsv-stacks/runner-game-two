@@ -300,12 +300,14 @@ window.addEventListener("load", () => {
     layer2.draw(ctx);
     layer3.update();
     layer3.draw(ctx);
-    handleEnemies(deltaTime);
     displayStatusText(ctx, score);
     liveHearts(ctx, playerLives);
     player.draw(ctx);
-    player.update(input, enemies);
-    if (!gameOver) requestAnimationFrame(animate);
+    if (!gameOver) {
+      handleEnemies(deltaTime);
+      player.update(input, enemies);
+      requestAnimationFrame(animate);
+    }
   }
   animate(0);
 });

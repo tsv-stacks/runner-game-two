@@ -4,6 +4,8 @@
   box-sizing: border-box;
 }
 
+@import url("https://fonts.cdnfonts.com/css/karmatic-arcade");
+
 #canvas1 {
   border: 3px solid black;
   position: absolute;
