@@ -4,7 +4,8 @@
   box-sizing: border-box;
 }
 
-#canvas1 {
+#canvas1,
+#splashscreen {
   border: 3px solid black;
   position: absolute;
   width: 800px;
@@ -14,4 +15,29 @@
   transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
+}
+
+#splashscreen {
+  z-index: 0;
+  object-fit: none;
+}
+
+#start-btn {
+  position: absolute;
+  font-size: 30px;
+  font-family: "Common Pixel", Helvetica, sans-serif;
+  padding: 10px 15px;
+  border: 3px solid black;
+  border-radius: 5px;
+  top: 79%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  cursor: pointer;
+  z-index: 1;
+}
+
+#start-btn:hover {
+  color: white;
+  background-color: black;
 }
