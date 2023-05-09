@@ -81,3 +81,5 @@
 //       }
 //     }
 //   }
+
+context.strokeRect(this.x + 67, this.y - 10, 36 * 2.4, 24 * 2.7);

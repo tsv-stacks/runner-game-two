@@ -1,16 +1,18 @@
 import playerAnimations from "./player/playerAnimations.js";
 import InputHandler from "./Scripts/InputHandler.js";
 import { displayStatusText, liveHearts } from "./Scripts/HUD.js";
+import { clamp, randomEnemyInterval } from "./Scripts/HelperFunctions.js";
+import {
+  backgroundImage1,
+  backgroundImage2,
+  backgroundImage3,
+  Background,
+} from "./Scripts/Background.js";
 
 window.addEventListener("load", () => {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
-  const backgroundImage1 = new Image();
-  backgroundImage1.src = "./background/city-back.png";
-  const backgroundImage2 = new Image();
-  backgroundImage2.src = "./background/city-middle.png";
-  const backgroundImage3 = new Image();
-  backgroundImage3.src = "./background/city-foreground.png";
+
   let enemies = [];
   let playerLives = 3;
   let score = 0;
@@ -66,9 +68,52 @@ window.addEventListener("load", () => {
         this.scaleWidth,
         this.scaleHeight
       );
+      context.strokeStyle = "white";
+      context.strokeRect(
+        this.x + 30,
+        this.y - 6,
+        this.scaleWidth - 60,
+        this.scaleHeight - 40
+      );
     }
 
-    update(input) {
+    update(input, enemies) {
+      // collision detection
+      enemies.forEach((enemy) => {
+        if (enemy.collision) {
+          return console.log("cooldown");
+        }
+
+        const circle = {
+          x: enemy.x + 110,
+          y: enemy.y + 30,
+          r: 24 * 1.6,
+        };
+        const rect = {
+          x: this.x + 30,
+          y: this.y - 6,
+          w: this.scaleWidth - 60,
+          h: this.scaleHeight - 40,
+        };
+
+        // Find the closest point to the circle within the rectangle
+        let closestX = clamp(circle.x, rect.x, rect.x + rect.w);
+        let closestY = clamp(circle.y, rect.y, rect.y + rect.h);
+
+        // Calculate the distance between the circle's center and the closest point
+        let distanceX = circle.x - closestX;
+        let distanceY = circle.y - closestY;
+        let distanceSquared = distanceX * distanceX + distanceY * distanceY;
+
+        // Check if the distance is less than the circle's radius
+        if (distanceSquared < circle.r * circle.r) {
+          console.log("Collision detected!");
+          enemy.collision = true;
+          playerLives--;
+        }
+      });
+
+      // Sprite Animation
       if (input.keys.indexOf("ArrowDown") > -1 && this.vy === 0) {
         this.currentAnimation = "roll";
       } else if (this.vy < 0) {
@@ -130,40 +175,6 @@ window.addEventListener("load", () => {
     }
   }
 
-  let bggamespeed = 4;
-
-  class Background {
-    constructor(imageWidth, imageHeight, image, speedModifier) {
-      this.imageHeight = imageHeight;
-      this.imageWidth = imageWidth;
-      this.image = image;
-      this.speedModifier = speedModifier;
-      this.x = 0;
-      this.y = 0;
-      this.speed = bggamespeed * this.speedModifier;
-      this.numImages = Math.ceil(canvas.width / this.imageWidth) + 1;
-    }
-    update() {
-      this.speed = bggamespeed * this.speedModifier;
-      if (this.x <= -this.imageWidth) {
-        this.x += this.imageWidth;
-      }
-      this.x = Math.floor(this.x - this.speed);
-      this.draw();
-    }
-    draw() {
-      for (let i = 0; i < this.numImages; i++) {
-        ctx.drawImage(
-          this.image,
-          this.x + i * this.imageWidth,
-          this.y,
-          this.imageWidth,
-          this.imageHeight
-        );
-      }
-    }
-  }
-
   class Enemy {
     constructor(
       gameWidth,
@@ -188,8 +199,11 @@ window.addEventListener("load", () => {
       this.ticksPerFrame = 3;
       this.speed = Math.floor(Math.random() * 3) + 2;
       this.markedForDeletion = false;
+      this.collision = false;
     }
     draw(context) {
+      context.strokeStyle = "white";
+
       context.drawImage(
         this.image,
         ([this.frameIndex] * this.imageWidth) / this.frames,
@@ -201,7 +215,12 @@ window.addEventListener("load", () => {
         this.imageWidth / this.scale,
         this.imageHeight * this.scale
       );
+
+      context.beginPath();
+      context.arc(this.x + 110, this.y + 30, 24 * 1.6, 0, Math.PI * 2);
+      context.stroke();
     }
+
     update() {
       this.x -= this.speed;
       this.tickCount++;
@@ -221,19 +240,16 @@ window.addEventListener("load", () => {
 
   function handleEnemies(deltaTime) {
     enemyTimer += deltaTime;
-
     if (enemyTimer > randomEnemyInterval()) {
       enemies.push(
         new Enemy(canvas.width, canvas.height, enemyImage, 672, 32, 3, 7)
       );
       enemyTimer = 0;
     }
-
     enemies.forEach((enemy) => {
       enemy.draw(ctx);
       enemy.update();
     });
-
     enemies = enemies.filter((enemy) => !enemy.markedForDeletion);
   }
 
@@ -243,28 +259,51 @@ window.addEventListener("load", () => {
   const enemyImage = new Image();
   enemyImage.src = "./Enemies/red-slime-idle.png";
 
-  const layer1 = new Background(246, 720, backgroundImage1, 0.1);
-  const layer2 = new Background(563, 720, backgroundImage2, 0.3);
-  const layer3 = new Background(1511, 720, backgroundImage3, 0.55);
+  let bggamespeed = 4;
+
+  const layer1 = new Background(
+    246,
+    720,
+    backgroundImage1,
+    0.1,
+    bggamespeed,
+    canvas.width
+  );
+  const layer2 = new Background(
+    563,
+    720,
+    backgroundImage2,
+    0.3,
+    bggamespeed,
+    canvas.width
+  );
+  const layer3 = new Background(
+    1511,
+    720,
+    backgroundImage3,
+    0.55,
+    bggamespeed,
+    canvas.width
+  );
 
   let lastTime = 0;
   let enemyTimer = 0;
-  function randomEnemyInterval() {
-    return Math.floor(Math.random() * 4000) + 3000;
-  }
 
   function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     layer1.update();
+    layer1.draw(ctx);
     layer2.update();
+    layer2.draw(ctx);
     layer3.update();
-    player.draw(ctx);
-    player.update(input);
+    layer3.draw(ctx);
     handleEnemies(deltaTime);
     displayStatusText(ctx, score);
     liveHearts(ctx, playerLives);
+    player.draw(ctx);
+    player.update(input, enemies);
     requestAnimationFrame(animate);
   }
   animate(0);
