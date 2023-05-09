@@ -12,13 +12,13 @@ import {
 window.addEventListener("load", () => {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
+  canvas.width = 800;
+  canvas.height = 720;
 
   let enemies = [];
   let playerLives = 3;
   let score = 0;
-
-  canvas.width = 800;
-  canvas.height = 720;
+  let gameOver = false;
 
   class Player {
     constructor(gameWidth, gameHeight) {
@@ -292,6 +292,7 @@ window.addEventListener("load", () => {
   function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
+    if (playerLives === 0) gameOver = true;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     layer1.update();
     layer1.draw(ctx);
@@ -304,7 +305,7 @@ window.addEventListener("load", () => {
     liveHearts(ctx, playerLives);
     player.draw(ctx);
     player.update(input, enemies);
-    requestAnimationFrame(animate);
+    if (!gameOver) requestAnimationFrame(animate);
   }
   animate(0);
 });
