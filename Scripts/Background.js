@@ -25,6 +25,7 @@ class Background {
     this.speed = this.bggamespeed * this.speedModifier;
     this.numImages = Math.ceil(this.canvasWidth / this.imageWidth) + 1;
   }
+
   update() {
     this.speed = this.bggamespeed * this.speedModifier;
     if (this.x <= -this.imageWidth) {
@@ -32,6 +33,7 @@ class Background {
     }
     this.x = Math.floor(this.x - this.speed);
   }
+
   draw(context) {
     for (let i = 0; i < this.numImages; i++) {
       context.drawImage(
@@ -42,6 +44,10 @@ class Background {
         this.imageHeight
       );
     }
+  }
+
+  restart() {
+    this.x = 0;
   }
 }
 

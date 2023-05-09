@@ -1,5 +1,4 @@
 import playerAnimations from "./player/playerAnimations.js";
-import InputHandler from "./Scripts/InputHandler.js";
 import { displayStatusText, liveHearts } from "./Scripts/HUD.js";
 import { clamp, randomEnemyInterval } from "./Scripts/HelperFunctions.js";
 import {
@@ -12,13 +11,36 @@ import {
 window.addEventListener("load", () => {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
+  canvas.width = 800;
+  canvas.height = 720;
 
   let enemies = [];
   let playerLives = 3;
   let score = 0;
+  let gameOver = false;
 
-  canvas.width = 800;
-  canvas.height = 720;
+  class InputHandler {
+    constructor() {
+      this.keys = [];
+      window.addEventListener("keydown", this.handleKeyDown.bind(this));
+      window.addEventListener("keyup", this.handleKeyUp.bind(this));
+    }
+
+    handleKeyDown(e) {
+      if (e.code.startsWith("Arrow") && !this.keys.includes(e.code)) {
+        this.keys.push(e.code);
+      }
+      if (e.code === "Enter" && gameOver) {
+        restartGame();
+      }
+    }
+
+    handleKeyUp(e) {
+      if (this.keys.includes(e.code)) {
+        this.keys.splice(this.keys.indexOf(e.code), 1);
+      }
+    }
+  }
 
   class Player {
     constructor(gameWidth, gameHeight) {
@@ -49,6 +71,13 @@ window.addEventListener("load", () => {
       this.ticksPerFrame = 5;
     }
 
+    restart() {
+      this.x = 10;
+      this.y = this.gameHeight - this.scaleHeight;
+      this.currentAnimation = "walk";
+      this.maxFrames = 8;
+    }
+
     draw(context) {
       const animation = this.playerAnimations.find(
         (anim) => anim.animation === this.currentAnimation
@@ -68,20 +97,13 @@ window.addEventListener("load", () => {
         this.scaleWidth,
         this.scaleHeight
       );
-      context.strokeStyle = "white";
-      context.strokeRect(
-        this.x + 30,
-        this.y - 6,
-        this.scaleWidth - 60,
-        this.scaleHeight - 40
-      );
     }
 
     update(input, enemies) {
       // collision detection
       enemies.forEach((enemy) => {
         if (enemy.collision) {
-          return console.log("cooldown");
+          return;
         }
 
         const circle = {
@@ -107,7 +129,6 @@ window.addEventListener("load", () => {
 
         // Check if the distance is less than the circle's radius
         if (distanceSquared < circle.r * circle.r) {
-          console.log("Collision detected!");
           enemy.collision = true;
           playerLives--;
         }
@@ -117,13 +138,10 @@ window.addEventListener("load", () => {
       if (input.keys.indexOf("ArrowDown") > -1 && this.vy === 0) {
         this.currentAnimation = "roll";
       } else if (this.vy < 0) {
-        console.log("jump up");
         this.currentAnimation = "run";
       } else if (this.vy > 0) {
-        console.log("fall");
         this.currentAnimation = "run";
       } else if (this.speed !== 0) {
-        console.log("running");
         this.currentAnimation = "run";
       } else {
         this.currentAnimation = "walk";
@@ -202,8 +220,6 @@ window.addEventListener("load", () => {
       this.collision = false;
     }
     draw(context) {
-      context.strokeStyle = "white";
-
       context.drawImage(
         this.image,
         ([this.frameIndex] * this.imageWidth) / this.frames,
@@ -215,10 +231,6 @@ window.addEventListener("load", () => {
         this.imageWidth / this.scale,
         this.imageHeight * this.scale
       );
-
-      context.beginPath();
-      context.arc(this.x + 110, this.y + 30, 24 * 1.6, 0, Math.PI * 2);
-      context.stroke();
     }
 
     update() {
@@ -289,9 +301,22 @@ window.addEventListener("load", () => {
   let lastTime = 0;
   let enemyTimer = 0;
 
+  function restartGame() {
+    player.restart();
+    layer1.restart();
+    layer2.restart();
+    layer3.restart();
+    enemies = [];
+    score = 0;
+    playerLives = 3;
+    gameOver = false;
+    animate(0);
+  }
+
   function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
+    if (playerLives === 0) gameOver = true;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     layer1.update();
     layer1.draw(ctx);
@@ -299,12 +324,14 @@ window.addEventListener("load", () => {
     layer2.draw(ctx);
     layer3.update();
     layer3.draw(ctx);
-    handleEnemies(deltaTime);
-    displayStatusText(ctx, score);
+    displayStatusText(ctx, score, canvas.width, canvas.height, gameOver);
     liveHearts(ctx, playerLives);
     player.draw(ctx);
-    player.update(input, enemies);
-    requestAnimationFrame(animate);
+    if (!gameOver) {
+      handleEnemies(deltaTime);
+      player.update(input, enemies);
+      requestAnimationFrame(animate);
+    }
   }
   animate(0);
 });

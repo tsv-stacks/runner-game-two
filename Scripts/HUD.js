@@ -1,9 +1,43 @@
-export function displayStatusText(context, score) {
-  context.font = "40px Helvetica";
-  context.fillStyle = "black";
-  context.fillText(`Score: ${score}`, 20, 50);
-  context.fillStyle = "white";
-  context.fillText(`Score: ${score}`, 22, 52);
+export function displayStatusText(
+  context,
+  score,
+  canvasWidth,
+  canvasHeight,
+  gameOver
+) {
+  if (!gameOver) {
+    context.textAlign = "left";
+    context.font = "40px Common Pixel, sans-serif";
+    context.fillStyle = "black";
+    context.fillText(`SCORE: ${score}`, 22, 50);
+    context.fillStyle = "white";
+    context.fillText(`SCORE: ${score}`, 24, 52);
+  } else {
+    context.textAlign = "center";
+    context.font = "60px Karmatic Arcade, sans-serif";
+    context.fillStyle = "black";
+    const line1 = "GAME OVER";
+    const line2 = `SCORE: ${score}`;
+    context.fillText(line1, canvasWidth / 2, canvasHeight / 2 - 80);
+    context.fillText(line2, canvasWidth / 2, canvasHeight / 2 + 80);
+    context.fillStyle = "white";
+    context.fillText(line1, canvasWidth / 2 + 4, canvasHeight / 2 - 76);
+    context.fillText(line2, canvasWidth / 2 + 4, canvasHeight / 2 + 84);
+    context.textAlign = "center";
+    context.font = "40px Common Pixel, sans-serif";
+    context.fillStyle = "black";
+    context.fillText(
+      `PRESS ENTER TO TRY AGAIN`,
+      canvasWidth / 2,
+      canvasHeight - 100
+    );
+    context.fillStyle = "white";
+    context.fillText(
+      `PRESS ENTER TO TRY AGAIN`,
+      canvasWidth / 2 + 2,
+      canvasHeight - 102
+    );
+  }
 }
 
 export function liveHearts(context, heart) {
