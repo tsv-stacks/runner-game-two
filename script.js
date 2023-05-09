@@ -15,7 +15,7 @@ window.addEventListener("load", () => {
   canvas.height = 720;
 
   let enemies = [];
-  let playerLives = 1;
+  let playerLives = 3;
   let score = 0;
   let gameOver = false;
 
@@ -103,7 +103,7 @@ window.addEventListener("load", () => {
       // collision detection
       enemies.forEach((enemy) => {
         if (enemy.collision) {
-          return console.log("cooldown");
+          return;
         }
 
         const circle = {
@@ -129,7 +129,6 @@ window.addEventListener("load", () => {
 
         // Check if the distance is less than the circle's radius
         if (distanceSquared < circle.r * circle.r) {
-          console.log("Collision detected!");
           enemy.collision = true;
           playerLives--;
         }
@@ -139,13 +138,10 @@ window.addEventListener("load", () => {
       if (input.keys.indexOf("ArrowDown") > -1 && this.vy === 0) {
         this.currentAnimation = "roll";
       } else if (this.vy < 0) {
-        console.log("jump up");
         this.currentAnimation = "run";
       } else if (this.vy > 0) {
-        console.log("fall");
         this.currentAnimation = "run";
       } else if (this.speed !== 0) {
-        console.log("running");
         this.currentAnimation = "run";
       } else {
         this.currentAnimation = "walk";

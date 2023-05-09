@@ -1,12 +1,16 @@
 # Runner Game
 
-- remove console.logs
-- increase game speed every 30 seconds
-- import google font + add to project
-- context.font = ""
-- Add Hearts + life system
-- Add score++ somewhere
-- Start and end screen
+- [ ] remove console.logs
+- [ ] increase game speed every 30 seconds
+- [x] import google font + add to project
+- [x] context.font = ""
+- [x] Add Hearts + life system
+- [x] Add score++ somewhere
+- [x] End screen
+- [ ] Start screen
+- [ ] Toggle Fullscreen button
+- [ ] Add music and mute button
+- [ ] Hurt Animation
 
 ## Credit
 
