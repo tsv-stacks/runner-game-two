@@ -254,7 +254,7 @@ window.addEventListener("load", () => {
       if (this.frameIndex >= this.frames) {
         this.frameIndex = 0;
       }
-      if (this.x < 0 - this.gameWidth + this.imageWidth) {
+      if (this.x < 0 - this.gameWidth + this.imageWidth - 30) {
         this.markedForDeletion = true;
         score += 100;
       }
