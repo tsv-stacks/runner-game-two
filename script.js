@@ -80,6 +80,10 @@ window.addEventListener("load", () => {
     update(input, enemies) {
       // collision detection
       enemies.forEach((enemy) => {
+        if (enemy.collision) {
+          return console.log("cooldown");
+        }
+
         const circle = {
           x: enemy.x + 110,
           y: enemy.y + 30,
@@ -104,6 +108,8 @@ window.addEventListener("load", () => {
         // Check if the distance is less than the circle's radius
         if (distanceSquared < circle.r * circle.r) {
           console.log("Collision detected!");
+          enemy.collision = true;
+          playerLives--;
         }
       });
 
@@ -193,6 +199,7 @@ window.addEventListener("load", () => {
       this.ticksPerFrame = 3;
       this.speed = Math.floor(Math.random() * 3) + 2;
       this.markedForDeletion = false;
+      this.collision = false;
     }
     draw(context) {
       context.strokeStyle = "white";
