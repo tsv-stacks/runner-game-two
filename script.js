@@ -68,13 +68,6 @@ window.addEventListener("load", () => {
         this.scaleWidth,
         this.scaleHeight
       );
-      context.strokeStyle = "white";
-      context.strokeRect(
-        this.x + 30,
-        this.y - 6,
-        this.scaleWidth - 60,
-        this.scaleHeight - 40
-      );
     }
 
     update(input, enemies) {
@@ -202,8 +195,6 @@ window.addEventListener("load", () => {
       this.collision = false;
     }
     draw(context) {
-      context.strokeStyle = "white";
-
       context.drawImage(
         this.image,
         ([this.frameIndex] * this.imageWidth) / this.frames,
@@ -215,10 +206,6 @@ window.addEventListener("load", () => {
         this.imageWidth / this.scale,
         this.imageHeight * this.scale
       );
-
-      context.beginPath();
-      context.arc(this.x + 110, this.y + 30, 24 * 1.6, 0, Math.PI * 2);
-      context.stroke();
     }
 
     update() {
@@ -300,7 +287,7 @@ window.addEventListener("load", () => {
     layer2.draw(ctx);
     layer3.update();
     layer3.draw(ctx);
-    displayStatusText(ctx, score);
+    displayStatusText(ctx, score, canvas.width, canvas.height, gameOver);
     liveHearts(ctx, playerLives);
     player.draw(ctx);
     if (!gameOver) {

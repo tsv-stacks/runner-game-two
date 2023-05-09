@@ -83,3 +83,18 @@
 //   }
 
 context.strokeRect(this.x + 67, this.y - 10, 36 * 2.4, 24 * 2.7);
+
+// Enemy circle hitbox
+context.strokeStyle = "white";
+context.beginPath();
+context.arc(this.x + 110, this.y + 30, 24 * 1.6, 0, Math.PI * 2);
+context.stroke();
+
+// Player rectangle hitbox
+context.strokeStyle = "white";
+context.strokeRect(
+  this.x + 30,
+  this.y - 6,
+  this.scaleWidth - 60,
+  this.scaleHeight - 40
+);
