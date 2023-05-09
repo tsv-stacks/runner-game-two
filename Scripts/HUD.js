@@ -6,6 +6,7 @@ export function displayStatusText(
   gameOver
 ) {
   if (!gameOver) {
+    context.textAlign = "left";
     context.font = "40px Common Pixel, sans-serif";
     context.fillStyle = "black";
     context.fillText(`SCORE: ${score}`, 22, 50);

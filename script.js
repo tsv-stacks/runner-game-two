@@ -1,5 +1,4 @@
 import playerAnimations from "./player/playerAnimations.js";
-import InputHandler from "./Scripts/InputHandler.js";
 import { displayStatusText, liveHearts } from "./Scripts/HUD.js";
 import { clamp, randomEnemyInterval } from "./Scripts/HelperFunctions.js";
 import {
@@ -16,9 +15,32 @@ window.addEventListener("load", () => {
   canvas.height = 720;
 
   let enemies = [];
-  let playerLives = 3;
+  let playerLives = 1;
   let score = 0;
   let gameOver = false;
+
+  class InputHandler {
+    constructor() {
+      this.keys = [];
+      window.addEventListener("keydown", this.handleKeyDown.bind(this));
+      window.addEventListener("keyup", this.handleKeyUp.bind(this));
+    }
+
+    handleKeyDown(e) {
+      if (e.code.startsWith("Arrow") && !this.keys.includes(e.code)) {
+        this.keys.push(e.code);
+      }
+      if (e.code === "Enter" && gameOver) {
+        restartGame();
+      }
+    }
+
+    handleKeyUp(e) {
+      if (this.keys.includes(e.code)) {
+        this.keys.splice(this.keys.indexOf(e.code), 1);
+      }
+    }
+  }
 
   class Player {
     constructor(gameWidth, gameHeight) {
@@ -47,6 +69,13 @@ window.addEventListener("load", () => {
 
       this.tickCount = 0;
       this.ticksPerFrame = 5;
+    }
+
+    restart() {
+      this.x = 10;
+      this.y = this.gameHeight - this.scaleHeight;
+      this.currentAnimation = "walk";
+      this.maxFrames = 8;
     }
 
     draw(context) {
@@ -275,6 +304,18 @@ window.addEventListener("load", () => {
 
   let lastTime = 0;
   let enemyTimer = 0;
+
+  function restartGame() {
+    player.restart();
+    layer1.restart();
+    layer2.restart();
+    layer3.restart();
+    enemies = [];
+    score = 0;
+    playerLives = 3;
+    gameOver = false;
+    animate(0);
+  }
 
   function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime;
