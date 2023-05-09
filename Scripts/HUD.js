@@ -23,6 +23,20 @@ export function displayStatusText(
     context.fillStyle = "white";
     context.fillText(line1, canvasWidth / 2 + 4, canvasHeight / 2 - 76);
     context.fillText(line2, canvasWidth / 2 + 4, canvasHeight / 2 + 84);
+    context.textAlign = "center";
+    context.font = "40px Common Pixel, sans-serif";
+    context.fillStyle = "black";
+    context.fillText(
+      `PRESS ENTER TO TRY AGAIN`,
+      canvasWidth / 2,
+      canvasHeight - 100
+    );
+    context.fillStyle = "white";
+    context.fillText(
+      `PRESS ENTER TO TRY AGAIN`,
+      canvasWidth / 2 + 2,
+      canvasHeight - 102
+    );
   }
 }
 
