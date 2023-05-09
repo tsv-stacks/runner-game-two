@@ -1,6 +1,6 @@
 # Runner Game
 
-- [ ] remove console.logs
+- [x] remove console.logs
 - [ ] increase game speed every 30 seconds
 - [x] import google font + add to project
 - [x] context.font = ""

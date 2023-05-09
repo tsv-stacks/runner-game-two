@@ -14,7 +14,7 @@ export function displayStatusText(
     context.fillText(`SCORE: ${score}`, 24, 52);
   } else {
     context.textAlign = "center";
-    context.font = "60px Karmatic Arcade, sans-serif";
+    context.font = "60px Karmatic Arcade, Common Pixel";
     context.fillStyle = "black";
     const line1 = "GAME OVER";
     const line2 = `SCORE: ${score}`;
