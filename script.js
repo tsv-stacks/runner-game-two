@@ -331,6 +331,10 @@ window.addEventListener("load", () => {
     if (playerLives === 0) {
       gameOver = true;
       localStorage.setItem("runnerScore", score);
+      window.parent.postMessage(
+        JSON.stringify({ type: "SCORE", payload: score }),
+        "http://127.0.0.1:5173"
+      );
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     layer1.update();
