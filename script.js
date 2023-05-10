@@ -9,6 +9,7 @@ import {
 } from "./Scripts/Background.js";
 
 window.addEventListener("load", () => {
+  localStorage.removeItem("runnerScore");
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
   canvas.width = 800;
@@ -327,7 +328,10 @@ window.addEventListener("load", () => {
   function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
-    if (playerLives === 0) gameOver = true;
+    if (playerLives === 0) {
+      gameOver = true;
+      localStorage.setItem("runnerScore", score);
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     layer1.update();
     layer1.draw(ctx);
