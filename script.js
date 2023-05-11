@@ -329,10 +329,7 @@ window.addEventListener("load", () => {
     lastTime = timeStamp;
     if (playerLives === 0) {
       gameOver = true;
-      window.parent.postMessage(
-        JSON.stringify({ runnerScore: score }),
-        "http://127.0.0.1:5173"
-      );
+      window.parent.postMessage(JSON.stringify({ runnerScore: score }), "*");
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     layer1.update();
