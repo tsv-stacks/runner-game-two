@@ -1,5 +1,7 @@
 # 2D Runner Game
 
+![image](https://github.com/tsv-stacks/runner-game-two/assets/113384739/b2766a9c-2a57-4070-9f7f-d0575f56e75a)
+
 A simple 2D platformer game developed using vanilla JavaScript, HTML, and CSS. This game is a part of the final [Team Arcade Project](https://github.com/tonymm55/team-arcade-game) I completed as part of Manchester Codes / Command Shift.
 
 ## How to Play
