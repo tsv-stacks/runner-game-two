@@ -331,7 +331,7 @@ window.addEventListener("load", () => {
       gameOver = true;
       window.parent.postMessage(
         JSON.stringify({ runnerScore: score }),
-        "http://127.0.0.1:5173"
+        "https://arcade-game-room.netlify.app"
       );
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
