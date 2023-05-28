@@ -21,10 +21,14 @@ window.addEventListener("load", () => {
 
   const startBtn = document.getElementById("start-btn");
   const splashscreen = document.getElementById("splashscreen");
+  const splashscreenContainer = document.getElementById(
+    "splashscreen-container"
+  );
 
   function startGame() {
     startBtn.style.display = "none";
     splashscreen.style.display = "none";
+    splashscreenContainer.style.display = "none";
     animate(0);
   }
 
